@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monímetro - Registro de Emoção</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+      color: #333;
+      text-align: center;
+    }
+    .emotions {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .emotion {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px;
+      background-color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .emotion:hover {
+      transform: scale(1.05);
+    }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Como você está se sentindo hoje?</h1>
+  <input type="text" id="bp" placeholder="Digite seu BP (ou deixe em branco para anônimo)"><br><br>
+  <div class="emotions">
+    <div class="emotion" onclick="enviarResposta('Alegria')">😀 Alegria</div>
+    <div class="emotion" onclick="enviarResposta('Tristeza')">😢 Tristeza</div>
+    <div class="emotion" onclick="enviarResposta('Raiva')">😡 Raiva</div>
+    <div class="emotion" onclick="enviarResposta('Medo')">😱 Medo</div>
+    <div class="emotion" onclick="enviarResposta('Nojinho')">🤢 Nojinho</div>
+    <div class="emotion" onclick="enviarResposta('Tô de boa')">😎 Tô de boa</div>
+  </div>
+
+  <div id="status"></div>
+
+  <script>
+    function enviarResposta(emocao) {
+      const bp = document.getElementById("bp").value.trim();
+      const payload = {
+        bp: bp || "não informado",
+        emocao: emocao,
+        data: new Date().toISOString()
+      };
+
+      // Substitua a URL abaixo pela URL da sua API intermediária
+      fetch("https://SUA-API-AQUI.com/enviar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("status").innerText = "Humor registrado com sucesso!";
+      })
+      .catch(error => {
+        console.error("Erro ao enviar:", error);
+        document.getElementById("status").innerText = "Erro ao registrar. Tente novamente.";
+      });
+    }
+  </script>
+</body>
+</html>
